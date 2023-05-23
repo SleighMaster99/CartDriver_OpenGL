@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>20185213 컴퓨터그래픽스 프로젝트</title>
+        <script id="vertex-shader" type="x-shader/x-vertex">
+            attribute vec4 vPosition;
+            attribute vec4 vColor;
+
+            uniform mat4 modelMatrix, modelViewMatrix, projectionMatrix;
+
+            varying vec4 fColor;
+            
+            void main() 
+            {
+                gl_Position = projectionMatrix * modelViewMatrix * modelMatrix * vPosition;
+
+                fColor = vColor;
+            } 
+        </script>
+
+        <script id="fragment-shader" type="x-shader/x-fragment">
+            precision mediump float;
+
+            varying vec4 fColor;
+            uniform vec4 fuColor;
+
+            void main() {
+                gl_FragColor = fuColor;
+            }
+        </script>
+
+        <script id="texMapVS" type="x-shader/x-vertex">
+            attribute vec4 vPosition;
+            attribute vec2 vTexCoord;
+            attribute vec4 vColor;
+
+            uniform mat4 modelMatrix, viewMatrix, projectionMatrix;
+
+            varying vec2 fTexCoord;
+            varying vec4 fColor;
+            
+            void main() {
+                gl_Position = projectionMatrix * viewMatrix * modelMatrix * vPosition;
+
+                fColor = vColor;
+                fTexCoord = vTexCoord;
+            }
+        </script>
+
+        <script id="texMapFS" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            uniform sampler2D texture;
+            
+            varying vec2 fTexCoord;
+            varying vec4 fColor;
+            
+            void main() {
+                gl_FragColor = fColor * texture2D(texture, fTexCoord);
+            }
+        </script>
+
+        <script type="text/javascript" src="../Common/webgl-utils.js"></script>
+        <script type="text/javascript" src="../Common/initShaders.js"></script>
+        <script type="text/javascript" src="../Common/MV.js"></script>
+        <script type="text/javascript" src="20185213_Project.js"></script>
+    </head>
+    <body>
+        <canvas id="gl-canvas" width="1024" height="600">
+            Oops... your browser doesn't support the HTML5 canvas element!
+        </canvas><br>
+        <div style="text-align:center;">
+            <table border="solid" style="margin-left: 267px; border-collapse : collapse;">
+                <tr>
+                    <td>부스터</td>
+                    <td colspan="2">N2O &nbsp; &nbsp;<progress id="Booster" value="0" max="100" style="width: 200px; height: 30px; accent-color: red;"></progress></td>
+                </tr>
+                <tr>
+                    <td rowspan="2">랩타임</td>
+                    <td>최고 기록</td>
+                    <td>현재 랩타임</td>
+                </tr>
+                <tr>
+                    <td style="width: 200px;"><p id="bestLapTime">-초</p></td>
+                    <td style="width: 200px;"><p id="lapTime"></p></td>
+                </tr>
+                <tr>
+                    <td>조작키</td>
+                    <td>부스터</td>
+                    <td>카트운전</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button id="left">Ctrl</button></td>
+                    <td>
+                        <button id="left">◀</button>
+                        <button id="up">▲</button>
+                        <button id="right">▶</button><br>
+                        <button id="down">▼</button>                        
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <img src="../images/fColor.bmp" hidden>
+            <img src="../images/road1.bmp" hidden>
+            <audio src="../Sounds/CarSound.mp3" loop id="CarSoundaudioPlayer"></audio>
+            <audio src="../Sounds/Brake.mp3" loop id="BrakeaudioPlayer"></audio>
+        </div>
+    </body>
+</html>
